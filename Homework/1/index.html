@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Canvas</title>
+	<link rel="stylesheet" type="text/css" href="../../assets/css/reset.css">
+	<style>
+		html,
+		body {
+			height: 100%;
+		}
+
+		.container {
+			min-height: 100%;
+			position: relative;
+		}
+
+		.canvas {
+			position: absolute;
+			height: 240px;
+			width: 240px;
+			top: calc(50% - 120px);
+			left: calc(50% - 120px);
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<canvas class="canvas" id="canvas" height="240px" width="240px"></canvas>
+	</div>
+
+	<script src="../../assets/js/jquery.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			var canvas = document.getElementById('canvas')
+			var ctrl = canvas.getContext('2d');
+
+			ctrl.fillStyle = "black";
+			ctrl.strokeRect(0, 0, 240, 240);
+			ctrl.fillRect(0, 0, 80, 80);
+			ctrl.fillRect(160, 0, 80, 80);
+			ctrl.fillRect(80, 80, 80, 80);
+			ctrl.fillRect(0, 160, 80, 80);
+			ctrl.fillRect(160, 160, 80, 80);
+			ctrl.strokeStyle = "red";
+			drawCircle(120, 40);
+			drawCircle(40, 120);
+			ctrl.strokeStyle = "blue";
+			drawCircle(200, 120);
+			drawCircle(120, 200);
+		});
+
+		function drawCircle (startX, startY) {
+			var canvas = document.getElementById('canvas')
+			var ctrl = canvas.getContext('2d');
+
+			ctrl.beginPath();
+			ctrl.arc(startX, startY, 25, 0, 2*Math.PI);
+			ctrl.stroke();
+		}
+	</script>
+</body>
+</html>

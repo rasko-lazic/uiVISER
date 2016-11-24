@@ -1,0 +1,50 @@
+body {
+	height: 100%;
+	padding-top: 200px;
+}
+
+.player-container {
+	height: 40px;
+	width: 300px;
+	margin: 0 auto;
+	border: 1px solid black;
+	border-radius: 5px;
+	box-shadow: 5px -5px 10px 0px rgba(125,125,125,1);
+}
+
+#play-control-button {
+	width: 35px;
+	height: 35px;
+	border: none;
+	background-color: transparent;
+	margin-top: 3px;
+	margin-left: 3px;
+	float: left;
+}
+
+.timeline-container {
+	display: inline-block;
+	height: 20px;
+	width: 200px;
+	margin: 10px;
+	position: relative;
+}
+
+#timeline {
+	height: 4px;
+	width: 100%;
+	border-radius: 2px;
+	position: absolute;
+	top: 8px;
+	background-color: #5ea8f1;
+	z-index: -5;
+}
+
+#playhead {
+	height: 18px;
+	width: 18px;
+	border-radius: 50%;
+	margin-top: 1px;
+	background-color: #999999;
+	cursor: -webkit-grab;
+}

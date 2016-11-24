@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Audio Player</title>
+	<link rel="stylesheet" type="text/css" href="../../assets/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="./src/css/audio.css">
+	<link rel="stylesheet" type="text/css" href="../../assets/css/font-awesome.css">
+</head>
+<body>
+
+	<audio id="music">
+		<source src="src/snd/track_1.mp3" type="audio/mpeg" />
+	</audio>
+
+	<div class="player-container">
+		<button type="button" class="fa fa-2x fa-play" id="play-control-button"></button>
+		<div class="timeline-container">
+			<div id="timeline"></div>
+			<div id="playhead"></div>
+		</div>
+	</div>
+
+	<script>
+
+	var timeline = document.getElementsByClassName('timeline-container')[0];
+	var playhead = document.getElementById('playhead');
+
+	timeline.addEventListener('click', function (event) {
+		var margin = event.layerX - 9;
+		playhead.style.marginLeft = margin + 'px';
+	});
+
+	playhead.addEventListener('mousedown', function () {
+		playhead.style.cursor = "-webkit-grabbing";
+		timeline.addEventListener('mousemove', movePlayhead);
+	});
+
+	var movePlayhead = function (event) {
+		var margin = event.layerX - 9;
+		playhead.style.marginLeft = margin + 'px';
+	}
+
+	playhead.addEventListener('mouseup', function () {
+		playhead.style.cursor = "default";
+		timeline.removeEventListener('mousemove', movePlayhead);
+	});
+
+
+
+	</script>
+</body>
+</html>

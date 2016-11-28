@@ -1,15 +1,24 @@
+@font-face {
+    font-family: Lucida Grande;
+    src: url('../../../../assets/fonts/lucida-grande.ttf');
+}
+
 body {
 	height: 100%;
 	padding-top: 200px;
 }
 
 .player-container {
+	position: relative;
+	display:flex;
 	height: 40px;
-	width: 300px;
+	width: 395px;
+	align-items:center;
 	margin: 0 auto;
 	border: 1px solid black;
 	border-radius: 5px;
-	box-shadow: 5px -5px 10px 0px rgba(125,125,125,1);
+	box-shadow: 0px 12px 17px -1px rgba(125,125,125,1);
+	background: -webkit-linear-gradient(top, #ededed, #ededed 20%, #c4c4c4 80%, #c4c4c4 100%);
 }
 
 #play-control-button {
@@ -20,6 +29,19 @@ body {
 	margin-top: 3px;
 	margin-left: 3px;
 	float: left;
+	outline: none;
+	color:  #515151;
+	cursor: pointer;
+}
+
+#playlist-show-button {
+	font-size: 24px;
+	border: none;
+	background-color: transparent;
+	outline: none;
+	color:  #515151;
+	cursor: pointer;
+	margin-left: 10px;
 }
 
 .timeline-container {
@@ -36,15 +58,75 @@ body {
 	border-radius: 2px;
 	position: absolute;
 	top: 8px;
-	background-color: #5ea8f1;
-	z-index: -5;
+	border: 1px solid #9e9e9e;
+	z-index: 10;
 }
 
 #playhead {
+	position: relative;
 	height: 18px;
 	width: 18px;
 	border-radius: 50%;
 	margin-top: 1px;
 	background-color: #999999;
 	cursor: -webkit-grab;
+	z-index: 20;
+}
+
+#overlay {
+	width: 100%; 
+	position: absolute; 
+	height: 95vh; 
+	top: -200px;
+	z-index: -20;
+}
+
+.timestamp {
+	font-size: .8em;
+	font-family: 'Lucida Grande', sans-serif;
+}
+
+.playlist {
+	position: absolute;
+	top: -105px;
+	left: 75px;
+	width: 250px;
+	opacity: 0;
+	transition: opacity .7s, transform 1s;
+}
+
+.playlist-item {
+	text-align: center;
+	height: 35px;
+	margin: 2px 0;
+	border-radius: 5px;
+	background-color: #efefef;
+	padding: 0 20px;
+	cursor: pointer;
+}
+
+.playlist-item:hover {
+	background-color: #e2e2e2;
+}
+
+.playlist-item img {
+	height: 35px;
+	width: auto;
+	float: left;
+}
+
+.title {
+	font-family: 'Lucida Grande', sans-serif;
+	font-weight: 500;
+	font-size: 0.9em;
+}
+
+.artist {
+	font-family: 'Lucida Grande', sans-serif;
+	font-size: 0.7em;
+	color: #797979;
+}
+
+.active {
+	background-color: #e2e2e2;
 }

@@ -8,44 +8,157 @@
 </head>
 <body>
 
-	<audio id="music">
-		<source src="src/snd/track_1.mp3" type="audio/mpeg" />
+	<audio id="music-player">
+		<source src="src/snd/track_1.mp3" id="current-source" type="audio/mpeg" />
 	</audio>
 
 	<div class="player-container">
-		<button type="button" class="fa fa-2x fa-play" id="play-control-button"></button>
+		<button type="button" class="fa fa-2x fa-play-circle-o" id="play-control-button" onclick="play()"></button>
+		<span id="current-timestamp" class="timestamp" style="margin-left: 10px;">--:--</span>
 		<div class="timeline-container">
+			<div id="overlay"></div>
 			<div id="timeline"></div>
 			<div id="playhead"></div>
 		</div>
+		<span id="duration-timestamp" class="timestamp">--:--</span>
+		<button type="button" class="fa fa-list-ul" id="playlist-show-button" onclick="show()"></button>
+		<ul class="playlist" id="playlist">
+			<li class="playlist-item" data-source="track_1.mp3">
+				<img src="./src/img/track_1.jpg" />
+				<span class="title">Peaceful Days</span><br>
+				<span class="artist">Household Trio</span>
+			</li>
+			<li class="playlist-item" data-source="track_2.mp3">
+				<img src="./src/img/track_2.jpg" />
+				<span class="title">Significance</span><br>
+				<span class="artist">Household Trio</span>
+			</li>
+			<li class="playlist-item" data-source="track_3.mp3">
+				<img src="./src/img/track_1.jpg" />
+				<span class="title">Hand is dealt</span><br>
+				<span class="artist">Household Trio</span>
+			</li>
+		</ul>
 	</div>
 
 	<script>
 
-	var timeline = document.getElementsByClassName('timeline-container')[0];
+	var player = document.getElementById('music-player');
+	var source = document.getElementById('current-source');
+	var playControlButton = document.getElementById('play-control-button');
+	var timeline = document.getElementById('timeline');
+	var timelineContainer = document.getElementsByClassName('timeline-container')[0];
 	var playhead = document.getElementById('playhead');
+	var timelineOverlay = document.getElementById('overlay');
+	var currentTimestamp = document.getElementById('current-timestamp');
+	var durationTimestamp = document.getElementById('duration-timestamp');
+	var playlist = document.getElementById('playlist');
+	var playlistItems = document.getElementsByClassName('playlist-item');
+	var self = this;
 
-	timeline.addEventListener('click', function (event) {
-		var margin = event.layerX - 9;
-		playhead.style.marginLeft = margin + 'px';
-	});
-
-	playhead.addEventListener('mousedown', function () {
-		playhead.style.cursor = "-webkit-grabbing";
-		timeline.addEventListener('mousemove', movePlayhead);
-	});
-
-	var movePlayhead = function (event) {
-		var margin = event.layerX - 9;
-		playhead.style.marginLeft = margin + 'px';
+	player.onloadedmetadata = function () {
+		durationTimestamp.innerHTML = convertToHumanTime(Math.round(player.duration));
 	}
 
-	playhead.addEventListener('mouseup', function () {
-		playhead.style.cursor = "default";
-		timeline.removeEventListener('mousemove', movePlayhead);
+	Array.from(playlistItems).forEach(function (item) {
+		item.addEventListener('click', function () {
+			purgeActive();
+			item.className += ' active';
+			source.src = 'src/snd/' + item.getAttribute('data-source');
+			player.load();
+			self.play();
+		}, false);
 	});
 
+	function purgeActive() {
+		Array.from(playlistItems).forEach(function (item) {
+			item.className = "playlist-item";
+		});
+	};
 
+	function convertToHumanTime(seconds) {
+		if (seconds < 10) {
+
+			return '00:0' + seconds;
+		} else if (seconds < 60) {
+
+			return '00:' + seconds;
+		} else {
+			minutes = Math.floor(seconds / 60);
+			secondsRemaining = seconds % 60;
+
+			if(secondsRemaining < 10) {
+				return '0' + minutes + ':0' + secondsRemaining;
+			} else {
+				return '0' + minutes + ':' + secondsRemaining;
+			}
+		}
+	}
+
+	function show() {
+		if(playlist.style.opacity == 1) {
+			playlist.style.webkitTransform = "translateY(15px)";
+			playlist.style.opacity = 0;
+		} else {
+			playlist.style.opacity = 1;
+			playlist.style.webkitTransform = "translateY(-15px)";
+		}
+	}
+
+	timelineContainer.addEventListener('click', movePlayhead, false);
+
+	player.addEventListener('timeupdate', function (e) {
+		currentTimestamp.innerHTML = convertToHumanTime(Math.round(player.currentTime));
+		var timelineLength = 200;
+		var margin = Math.round(timelineLength * (player.currentTime / player.duration));
+		var percentage = Math.round((player.currentTime / player.duration) * 100);
+
+		playhead.style.marginLeft = margin + 'px';
+		timeline.style.background = generateGradient(percentage);
+
+		if (player.currentTime == player.duration) {
+			playControlButton.className = "fa fa-2x fa-play-circle-o";	
+		}
+	});	
+
+	function movePlayhead(event) {
+		var timelineLength = 200;
+		var margin = event.layerX - 9;
+		var percentage = Math.round(((event.layerX - 9) / timelineLength) * 100);
+		
+		playhead.style.marginLeft = margin + 'px';
+		timeline.style.background = generateGradient(percentage);
+		player.currentTime = player.duration * (percentage / 100);
+	}
+
+	playhead.addEventListener('mousedown', function () {
+		// playhead.style.cursor = "-webkit-grabbing";
+		timelineOverlay.style.cursor = "-webkit-grabbing";
+		timelineOverlay.style.zIndex = 50;
+
+		timelineOverlay.addEventListener('mousemove', movePlayhead);
+	});
+
+	timelineOverlay.addEventListener('mouseup', function () {
+			playhead.style.cursor = "-webkit-grab";
+			timelineOverlay.style.cursor = "default";
+			timelineOverlay.style.zIndex = -20;
+			timelineOverlay.removeEventListener('mousemove', movePlayhead);
+	});
+
+	function play() {
+		if(player.paused) {
+			player.play();
+			playControlButton.className = "fa fa-2x fa-pause-circle-o";
+		} else {
+			player.pause();
+			playControlButton.className = "fa fa-2x fa-play-circle-o";
+		}
+	}
+
+	function generateGradient(percentage) {
+		return '-webkit-linear-gradient(left, #5ea8f1 0%, #5ea8f1 ' + percentage + '%, transparent ' + percentage + '%, transparent 100%)';
+	}
 
 	</script>
 </body>

@@ -1,0 +1,84 @@
+html, body {
+	height: 100%;
+}
+
+body {
+  	display: flex;
+  	align-items: center;
+  	justify-content: center;
+}
+
+#container {
+	background-image: url("../img/wood-texture_1083-21.jpg");
+	background-repeat: no-repeat;
+	box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+	position: relative;
+	overflow: hidden;
+}
+
+.ball {
+	height: 120px;
+	width: 120px;
+	border-radius: 100%;
+	background-color: #85b8c8;
+	position: absolute;
+	top: calc(50% - 60px);
+	left: calc(50% - 60px);
+	box-shadow: 7px 4px 5px 0px rgba(0,0,0,0.75);
+}
+
+#ball-one {
+	animation-name: up-left;
+	animation-delay: 1.5s;
+    animation-duration: 5s;
+}
+
+#ball-two {
+	animation-name: down-right;
+	animation-delay: 1.5s;
+    animation-duration: 5s;
+}
+
+@keyframes up-left {
+	45% { 
+		top: -200px;
+		left:  calc(50% - 60px); 
+	}
+
+	50% { 
+		top: -200px;
+	 	left: -200px; 
+	}
+
+	55% {
+		top: calc(50% - 60px);
+		left:  -200px;
+	}
+
+	100% { 
+		top: calc(50% - 60px);
+		left: calc(50% - 60px);
+	}
+}
+
+@keyframes down-right {
+	45% { 
+		top: calc(100% + 200px);
+		left:  calc(50% - 60px); 
+	}
+
+	50% { 
+		top: calc(100% + 200px);
+	 	left: calc(100% + 200px); 
+	}
+
+	55% {
+		top: calc(50% - 60px);
+		left: calc(100% + 200px);
+	}
+
+	100% { 
+		top: calc(50% - 60px);
+		left: calc(50% - 60px);
+	}
+}

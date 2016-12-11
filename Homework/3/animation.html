@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Animation test</title>
+	<link rel="stylesheet" type="text/css" href="../../assets/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="./src/css/animation.css">
+</head>
+<body>
+
+	<div id="container">
+		<div class="ball" id="ball-one"></div>
+		<div class="ball" id="ball-two"></div>
+	</div>
+
+	<script>
+		window.onload = function () {
+			var container = document.getElementById('container');
+
+			var containerStyle = container.currentStyle || window.getComputedStyle(container, false);
+			var imageSrc = containerStyle.backgroundImage.replace(/url\((['"])?(.*?)\1\)/gi, '$2');
+				                        
+			var backgroundImage = new Image();
+			backgroundImage.src = imageSrc;
+
+			container.style.width = backgroundImage.width + 'px';
+			container.style.height = backgroundImage.height + 'px';
+		}
+	</script>
+
+</body>
+</html>
